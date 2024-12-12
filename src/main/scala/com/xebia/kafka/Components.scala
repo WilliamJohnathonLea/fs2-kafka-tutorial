@@ -43,12 +43,16 @@ object Components {
     logger: Logger[IO]
   ): Pipe[IO, (FeedState, Packet[P]), (FeedState, Packet[P])] =
     _.evalMapFilter { case (state, p) =>
-      logger.info(s"deduplicating ${p.sport}:${p.feedId}:${p.seqNum}") *>
-        IO.pure {
-          Option.when(p.seqNum > state.lastSeqNum) {
-            state.copy(lastSeqNum = p.seqNum) -> p
-          }
-        }
+      val packetDesc = s"${p.sport}:${p.feedId}:${p.seqNum}"
+      for {
+        _ <- logger.info(s"deduplicating $packetDesc")
+        res <- IO.pure {
+                 Option.when(p.seqNum > state.lastSeqNum) {
+                   state.copy(lastSeqNum = p.seqNum) -> p
+                 }
+               }
+        _ <- IO.whenA(res.isEmpty)(logger.warn(s"removed duplicate $packetDesc"))
+      } yield res
     }
 
   def enrichPipe[P](implicit
@@ -66,7 +70,10 @@ object Components {
         logger.info(s"enriching ${p.sport}:${p.feedId}") *>
           client
             .use(_.expectOption[EnrichmentData](req))
-            .recover { case _ => None }
+            .recoverWith { case _ =>
+              logger.warn(s"failed to enrich ${p.sport}:${p.feedId}") *>
+                IO.none
+            }
             .map { data =>
               state.copy(enrichmentData = data) -> p
             }
@@ -87,10 +94,10 @@ object Components {
   ): Pipe[IO, (FeedState, Packet[P]), (FeedState, Packet[P])] =
     _.evalMap { case (state, p) =>
       val key = s"${p.sport}:${p.feedType}:${p.feedId}:state"
-      logger.info(s"saving state for ${p.sport}:${p.feedId}")
-      redis.use { redis =>
-        redis.hSet(key, FeedState.toRedisHash(state)).as(state -> p)
-      }
+      logger.info(s"saving state for ${p.sport}:${p.feedId}") *>
+        redis.use { redis =>
+          redis.hSet(key, FeedState.toRedisHash(state)).as(state -> p)
+        }
     }
 
 }
