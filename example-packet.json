@@ -1,1 +1,1 @@
-{"seqNum": 1,"sport": "football","feedType": "actoins","feedId": "e95c9257-d4b6-4543-bf65-3da086338104","payload": 0}
+{"seqNum": 1,"sport": "football","feedType": "actoins","feedId": "e95c9257-d4b6-4543-bf65-3da086338104","payload": {"action": "point_score","team": "5f9b49aa-f1bf-4be9-a798-a5bd4e7898fa","player": "f4c7a854-234d-47db-93a7-e8a34d5f56c2"}}
