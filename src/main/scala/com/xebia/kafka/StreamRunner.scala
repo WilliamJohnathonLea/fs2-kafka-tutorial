@@ -22,6 +22,8 @@ import com.xebia.enrichment.LocalUriProvider
 import com.xebia.enrichment.UriProvider
 import com.xebia.kafka.Components._
 import com.xebia.kafka.KafkaSerde._
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
 
 import java.util.UUID
 

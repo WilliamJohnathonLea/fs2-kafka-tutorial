@@ -4,6 +4,8 @@ import cats.effect.IO
 import cats.effect.IOApp
 
 import com.xebia.config.AppConfig
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
 
 object Main extends IOApp.Simple {
 

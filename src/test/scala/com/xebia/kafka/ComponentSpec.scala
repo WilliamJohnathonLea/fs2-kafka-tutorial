@@ -6,6 +6,9 @@ import cats.effect.IO
 import org.scalatest.freespec.AsyncFreeSpec
 import org.scalatest.matchers.should.Matchers
 
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
+
 import java.util.UUID
 
 class ComponentSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers {
@@ -59,7 +62,7 @@ class ComponentSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers {
 
   "the transformation component" - {
     "can transform a Packet[Int] to Packet[String]" in {
-      val state = FeedState.empty
+      val state = com.xebia.model.FeedState.empty
       val feedId = UUID.randomUUID()
       val packetIn = Packet[Int](1, "football", "actions", feedId, 1)
       val packetOut = Packet[String](1, "football", "actions", feedId, "1")

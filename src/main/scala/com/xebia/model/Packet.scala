@@ -1,4 +1,4 @@
-package com.xebia.kafka
+package com.xebia.model
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._

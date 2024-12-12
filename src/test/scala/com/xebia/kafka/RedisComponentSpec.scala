@@ -17,6 +17,9 @@ import org.testcontainers.utility.DockerImageName
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 import org.typelevel.log4cats.Logger
 
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
+
 import java.util.UUID
 
 class RedisComponentSpec

@@ -13,6 +13,9 @@ import org.scalatest.freespec.AsyncFreeSpec
 import org.scalatest.matchers.should.Matchers
 
 import com.xebia.enrichment.UriProvider
+import com.xebia.model.EnrichmentData
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
 
 import java.util.UUID
 

@@ -11,6 +11,9 @@ import org.http4s.Request
 import org.http4s.Uri
 
 import com.xebia.enrichment.UriProvider
+import com.xebia.model.EnrichmentData
+import com.xebia.model.FeedState
+import com.xebia.model.Packet
 
 object Components {
 
@@ -51,12 +54,16 @@ object Components {
     _.evalMap { case (state, p) =>
       val uri = provider.provide(p.sport, p.feedId.toString())
       val req = Request[IO](uri = Uri.unsafeFromString(uri))
-      client
-        .use(_.expectOption[EnrichmentData](req))
-        .recover { case _ => None }
-        .map { data =>
-          state.copy(enrichmentData = data) -> p
-        }
+      if (state.enrichmentData.nonEmpty) {
+        IO.pure(state -> p)
+      } else {
+        client
+          .use(_.expectOption[EnrichmentData](req))
+          .recover { case _ => None }
+          .map { data =>
+            state.copy(enrichmentData = data) -> p
+          }
+      }
     }
 
   def transformPipe[PIn, POut](
