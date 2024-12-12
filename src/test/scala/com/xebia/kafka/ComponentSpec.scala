@@ -5,6 +5,8 @@ import cats.effect.IO
 
 import org.scalatest.freespec.AsyncFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.typelevel.log4cats.slf4j.Slf4jLogger
+import org.typelevel.log4cats.Logger
 
 import com.xebia.model.FeedState
 import com.xebia.model.Packet
@@ -12,6 +14,8 @@ import com.xebia.model.Packet
 import java.util.UUID
 
 class ComponentSpec extends AsyncFreeSpec with AsyncIOSpec with Matchers {
+
+  implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
 
   "the depuplication component" - {
     val state = FeedState(1, None)

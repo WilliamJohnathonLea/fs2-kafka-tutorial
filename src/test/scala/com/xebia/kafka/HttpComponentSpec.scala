@@ -11,6 +11,8 @@ import org.http4s.client.Client
 import org.http4s.ember.client.EmberClientBuilder
 import org.scalatest.freespec.AsyncFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.typelevel.log4cats.slf4j.Slf4jLogger
+import org.typelevel.log4cats.Logger
 
 import com.xebia.enrichment.UriProvider
 import com.xebia.model.EnrichmentData
@@ -24,6 +26,8 @@ class HttpComponentSpec
   with AsyncIOSpec
   with Matchers
   with TestContainerForEach {
+
+  implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
 
   override val containerDef =
     WireMockContainer.Def().withMappingFromResource("enrichment_success.json")

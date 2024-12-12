@@ -23,6 +23,7 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= Seq(
       "org.typelevel" %% "log4cats-slf4j" % "2.7.0",
+      "ch.qos.logback" % "logback-classic" % "1.4.14" % "runtime",
       "io.circe" %% "circe-core" % CirceVersion,
       "io.circe" %% "circe-generic" % CirceVersion,
       "io.circe" %% "circe-parser" % CirceVersion,

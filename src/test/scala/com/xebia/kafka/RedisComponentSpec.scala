@@ -28,6 +28,8 @@ class RedisComponentSpec
   with Matchers
   with TestContainerForEach {
 
+  implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
+
   override val containerDef =
     RedisContainer.Def(
       DockerImageName.parse("redis:7")
@@ -37,7 +39,6 @@ class RedisComponentSpec
     test: Resource[IO, RedisCommands[IO, String, String]] => IO[Assertion]
   ): IO[Assertion] =
     withContainers { container =>
-      implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
       val redisCodec: RedisCodec[String, String] =
         RedisCodec.Utf8
       val redisComms: Resource[IO, RedisCommands[IO, String, String]] =
